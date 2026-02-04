@@ -1,0 +1,27 @@
+services:
+  redis_db:
+    image: redis:alpine
+    networks:
+      - secure_net
+
+  honeypot:
+    build: ./honeypot
+    ports:
+      - "9999:9999"
+    depends_on:
+      - redis_db
+    networks:
+      - secure_net
+
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "8501:8501"
+    depends_on:
+      - redis_db
+    networks:
+      - secure_net
+
+networks:
+  secure_net:
+    driver: bridge
